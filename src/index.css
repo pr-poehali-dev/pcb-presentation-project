@@ -6,87 +6,58 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
-
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* PCB Theme */
+    --pcb-bg: #040d08;
+    --pcb-surface: #071410;
+    --pcb-green: #00ff88;
+    --pcb-green-dim: #00cc6a;
+    --pcb-green-muted: #0a3d22;
+    --pcb-cyan: #00e5ff;
+    --pcb-amber: #ffaa00;
+    --pcb-red: #ff4444;
+    --pcb-grid: rgba(0, 255, 136, 0.07);
+    --pcb-trace: rgba(0, 255, 136, 0.4);
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -94,8 +65,422 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ── PCB Presentation Base ── */
+.pcb-app {
+  font-family: "IBM Plex Sans", sans-serif;
+  background: var(--pcb-bg);
+  color: #c8f0dc;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Grid background */
+.pcb-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--pcb-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pcb-grid) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Subtle circuit traces in corners */
+.pcb-traces {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pcb-traces::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  background-image:
+    linear-gradient(90deg, var(--pcb-trace) 1px, transparent 1px),
+    linear-gradient(var(--pcb-trace) 1px, transparent 1px);
+  background-size: 20px 20px;
+  mask-image: radial-gradient(ellipse at top left, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(
+    ellipse at top left,
+    black 30%,
+    transparent 70%
+  );
+}
+
+.pcb-traces::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background-image:
+    linear-gradient(90deg, var(--pcb-trace) 1px, transparent 1px),
+    linear-gradient(var(--pcb-trace) 1px, transparent 1px);
+  background-size: 20px 20px;
+  mask-image: radial-gradient(
+    ellipse at bottom right,
+    black 30%,
+    transparent 70%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse at bottom right,
+    black 30%,
+    transparent 70%
+  );
+}
+
+/* Slide transitions */
+.slide-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 4rem;
+  opacity: 0;
+  transform: translateX(60px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+.slide.prev {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+
+/* Typography */
+.font-orbitron {
+  font-family: "Orbitron", monospace;
+}
+.font-mono-ibm {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+/* Glow effects */
+.glow-green {
+  text-shadow:
+    0 0 20px rgba(0, 255, 136, 0.6),
+    0 0 40px rgba(0, 255, 136, 0.3);
+}
+.glow-cyan {
+  text-shadow:
+    0 0 20px rgba(0, 229, 255, 0.6),
+    0 0 40px rgba(0, 229, 255, 0.3);
+}
+
+.border-glow {
+  box-shadow:
+    0 0 0 1px rgba(0, 255, 136, 0.3),
+    inset 0 0 20px rgba(0, 255, 136, 0.05);
+}
+
+/* Scanline effect */
+.scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Tag/badge */
+.pcb-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pcb-green);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  padding: 3px 10px;
+  background: rgba(0, 255, 136, 0.06);
+}
+
+/* Progress bar */
+.pcb-progress {
+  height: 2px;
+  background: rgba(0, 255, 136, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.pcb-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pcb-green), var(--pcb-cyan));
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+}
+
+/* Interactive card */
+.pcb-card {
+  background: rgba(0, 255, 136, 0.04);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.pcb-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--pcb-green),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.pcb-card:hover::before {
+  left: 100%;
+}
+
+.pcb-card:hover {
+  background: rgba(0, 255, 136, 0.09);
+  border-color: rgba(0, 255, 136, 0.5);
+  box-shadow:
+    0 0 20px rgba(0, 255, 136, 0.1),
+    inset 0 0 20px rgba(0, 255, 136, 0.03);
+}
+
+.pcb-card.selected {
+  background: rgba(0, 255, 136, 0.12);
+  border-color: var(--pcb-green);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+}
+
+/* Nav button */
+.pcb-btn {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  background: transparent;
+  border: 1px solid rgba(0, 255, 136, 0.35);
+  color: var(--pcb-green);
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+}
+
+.pcb-btn:hover {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: var(--pcb-green);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+.pcb-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Timeline step */
+.timeline-step {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline-step::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--pcb-green);
+  background: var(--pcb-bg);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+.timeline-step::after {
+  content: "";
+  position: absolute;
+  left: 3.5px;
+  top: calc(50% + 8px);
+  width: 1px;
+  height: calc(100% - 8px);
+  background: linear-gradient(to bottom, rgba(0, 255, 136, 0.4), transparent);
+}
+
+/* Dot animation */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.7);
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    top: -2px;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes flicker {
+  0%,
+  95%,
+  100% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0.85;
+  }
+  97% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes trace-draw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.animate-flicker {
+  animation: flicker 4s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* SVG trace animation */
+.trace-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: trace-draw 2s ease forwards;
+}
+
+/* Slide-in items animation */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-item {
+  opacity: 0;
+  animation: slideInUp 0.5s ease forwards;
+}
+
+.slide-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.slide-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.slide-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.slide-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.slide-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.slide-item:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+/* Divider line */
+.pcb-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 136, 0.4),
+    transparent
+  );
+  margin: 1rem 0;
+}
+
+/* Component dot on PCB diagram */
+.pcb-component {
+  transition: all 0.2s ease;
+}
+
+.pcb-component:hover {
+  filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.8));
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 136, 0.3);
 }
